@@ -1,0 +1,56 @@
+[gd_scene load_steps=10 format=3 uid="uid://etpirtkgx1pf"]
+
+[ext_resource type="Texture2D" uid="uid://t8pntvwemxab" path="res://icon.svg" id="1_3hnbd"]
+[ext_resource type="PackedScene" uid="uid://dv6hoji68ws7e" path="res://Scenes/Player.tscn" id="1_ijv5j"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_752sw"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_ijv5j"]
+sky_material = SubResource("ProceduralSkyMaterial_752sw")
+
+[sub_resource type="Environment" id="Environment_3hnbd"]
+background_mode = 2
+sky = SubResource("Sky_ijv5j")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gjion"]
+albedo_texture = ExtResource("1_3hnbd")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_752sw"]
+size = Vector2(20, 20)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ijv5j"]
+points = PackedVector3Array(-10, 0, -10, -10, 0, 10, 10, 0, -10, 10, 0, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3hnbd"]
+
+[node name="Environment" type="Node3D"]
+
+[node name="Light" type="Node" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Light"]
+environment = SubResource("Environment_3hnbd")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Light"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+material_override = SubResource("StandardMaterial3D_gjion")
+mesh = SubResource("PlaneMesh_752sw")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("ConvexPolygonShape3D_ijv5j")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.416863, -2.43307)
+mesh = SubResource("BoxMesh_3hnbd")
+
+[node name="Player" parent="." instance=ExtResource("1_ijv5j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.308117, 1, 0.443317)
